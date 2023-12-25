@@ -11,9 +11,9 @@ resource "aws_route_table" "rt_public_BS" {
   }
 }
 
-resource "aws_route_table_association" "rta_public_BS" {
-  for_each       = var.public_subnets_BS
-  subnet_id      = aws_subnet.public_subnets_BS[each.key].id
+resource "aws_route_table_association" "rta_public" {
+  for_each       = var.public_subnets
+  subnet_id      = aws_subnet.public_subnets[each.key].id
   route_table_id = aws_route_table.rt_public_BS.id
 }
 
@@ -44,6 +44,7 @@ resource "aws_route_table_association" "rta_public_BS" {
 
 # resource "aws_route_table" "rt_private_at" {
 #   vpc_id = module.vpc.vpc_id
+#   for_each = var.public_subnets
 
 #   route {
 #     cidr_block = "0.0.0.0/0"
@@ -52,6 +53,19 @@ resource "aws_route_table_association" "rta_public_BS" {
 
 #   tags = {
 #     Name = "${var.prefix}-rtb-private_at"
+#   }
+# }
+
+# resource "aws_route_table" "db" {
+#   vpc_id = "${aws_vpc.default.id}"
+
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = "${aws_nat_gateway.default.id}"
+#   }
+
+#   tags {
+#     Name = "DB"
 #   }
 # }
 
