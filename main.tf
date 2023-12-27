@@ -122,15 +122,6 @@ module "vpc" {
   source   = "./vpc/"
   vpc_cidr = "10.0.0.0/20"
 }
-<<<<<<< HEAD
- 
-resource "aws_subnet" "public_subnets_BS" {
-  for_each          = var.public_subnets_BS
-  vpc_id            = module.vpc.vpc_id
-  cidr_block        = each.value.cidr_block
-  availability_zone = each.value.availability_zone
-   map_public_ip_on_launch = true # To ensure the instance gets a public IP
-=======
 
 resource "aws_subnet" "public_subnets" {
   for_each                = var.public_subnets
@@ -138,7 +129,6 @@ resource "aws_subnet" "public_subnets" {
   cidr_block              = each.value.cidr_block
   availability_zone       = each.value.availability_zone
   map_public_ip_on_launch = true # To ensure the instance gets a public IP
->>>>>>> 60e52823b968b55400b0b7356091db19783babb1
 
   tags = {
     Name = join("-", [var.prefix, each.key])
@@ -200,5 +190,3 @@ resource "aws_subnet" "private_subnets_AT" {
 #     Name = rds
 #   }
 # }
-
->>>>>>> 60e52823b968b55400b0b7356091db19783babb1
