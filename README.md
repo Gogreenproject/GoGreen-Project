@@ -6,13 +6,6 @@ NLB_webtier.tf
 ASG_webtier.tf
 ASG_webtier.tf
 cloudfront
-
-
-Shakhlo:
-
-
-
-
 Wright:
 
 
@@ -35,3 +28,7 @@ natgw.tf
 internetgw.tf
 routetls.tf
 vpc folder
+bastionhost.tf
+webtier.tf
+apptier.tf
+providers.tf
