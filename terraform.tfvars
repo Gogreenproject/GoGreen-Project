@@ -37,11 +37,6 @@ ec2_instance = {
     #   }
   }
 }
-#   bastion_host_2 = {
-#     Bastion_Host_name = "BASTION_HOST_2",
-#     subnet_id         = ""
-#   }
-
 
 security_groups = {
   "Bastion_host_sg" : {

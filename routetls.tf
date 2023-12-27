@@ -15,6 +15,9 @@ resource "aws_route_table_association" "rta_public" {
   for_each       = var.public_subnets
   subnet_id      = aws_subnet.public_subnets[each.key].id
   route_table_id = aws_route_table.rt_public_BS.id
+<<<<<<< HEAD
+}
+=======
 }
 
 
@@ -51,3 +54,4 @@ resource "aws_route_table" "rt_private_at" {
 #   }
 # }
 
+>>>>>>> 60e52823b968b55400b0b7356091db19783babb1
