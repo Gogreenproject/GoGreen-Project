@@ -7,3 +7,4 @@ natgw.tf
 internetgw.tf
 routetls.tf
 vpc folder
+providers.tf
