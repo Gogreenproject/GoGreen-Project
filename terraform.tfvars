@@ -25,16 +25,6 @@ ec2_instance = {
   bastion_host_1 = {
     name      = "BASTION_HOST_1",
     subnet_id = ""
-    #  web_tier_1 = {
-    #     name = "WEB_TIER_1",
-    #     subnet_id         = ""
-
-    #   },
-    #   web_tier_2 = {
-    #     name = "WEB_TIER_2",
-    #     subnet_id         = ""
-    #   }
-    #   }
   }
 }
 
