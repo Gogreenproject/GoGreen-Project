@@ -138,3 +138,66 @@ variable "private_subnets_AT" {
 #   default = {
 #   }
 # }
+
+
+
+#sg_alb_web
+
+variable "ingress_rules_web" {
+  type = list(any)
+}
+variable "sg_name_web" {
+  type = string
+}
+variable "egress_rules_web" {
+  type = list(any)
+}
+variable "sg_description_web" {
+  type = string
+}
+# variable "security_groups_web" {
+#   type = list(any)
+# }
+variable "tags_sg_web" {
+  type = map(any)
+}
+##############################
+#sg_alb_app
+variable "ingress_rules_app" {
+  type = list(any)
+
+}
+variable "sg_name_app" {
+  type = string
+}
+variable "egress_rules_app" {
+  type = list(any)
+}
+variable "sg_description_app" {
+  type = string
+}
+# variable "security_groups_app" {
+#   type = list(any)
+# }
+variable "tags_sg_app" {
+  type = map(any)
+}
+##############################
+#web alb
+variable "tags_alb_web" {
+  type = map(any)
+}
+
+#app alb
+variable "tags_alb_app" {
+  type = map(any)
+}
+
+##############################
+#target group 
+variable "tags_app_tg" {
+  type = map(any)
+}
+variable "tags_web_tg" {
+  type = map(any)
+}

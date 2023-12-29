@@ -40,3 +40,65 @@ resource "aws_subnet" "public_subnets" {
     Name = join("-", [var.prefix, each.key])
   }
 }
+
+
+#Application load balancer 
+module "web-alb" {
+  source = "./modules/application_load_balancer"
+  name   = "tf-webtier-alb"
+  #internal           = false
+  #load_balancer_type = "application"
+  security_groups = [module.sg_alb_web.sg_id]
+  subnets         = [module.subnet-pub-1a.subnet_id, module.subnet-pub-1b.subnet_id]
+
+  #enable_deletion_protection = false
+
+  tags_alb = var.tags_alb_web
+}
+
+#Target group
+module "webTier-tg" {
+  source   = "./modules/target_group"
+  name     = "tf-webTier-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = module.my_vpc.my_vpc_id
+  tags_tg  = var.tags_web_tg
+}
+
+#Listener group
+module "http_listener_web" {
+  source   = "./modules/listener_group"
+  lb_arn   = module.web-alb.alb_arn
+  port     = "80"
+  protocol = "HTTP"
+  #ssl_policy        = "ELBSecurityPolicy-2016-08"
+  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  tg_arn = module.webTier-tg.tg_arn
+}
+
+#Autoscaling 1
+module "web_asg1" {
+  source              = "./modules/autoscaling_group"
+  vpc_zone_identifier = [module.subnet-pub-1a.subnet_id]
+  #  availability_zones = ["us-west-2a"]
+  desired_capacity  = 1
+  max_size          = 1
+  min_size          = 1
+  target_group_arns = [module.webTier-tg.tg_arn]
+  launch_template   = module.webtier_lt.lt_id
+
+}
+
+#Autoscaling 2
+module "web_asg2" {
+  source              = "./modules/autoscaling_group"
+  vpc_zone_identifier = [module.subnet-pub-1b.subnet_id]
+  #  availability_zones = ["us-west-2b"]
+  desired_capacity  = 1
+  max_size          = 1
+  min_size          = 1
+  target_group_arns = [module.webTier-tg.tg_arn]
+  launch_template   = module.webtier_lt.lt_id
+
+}
