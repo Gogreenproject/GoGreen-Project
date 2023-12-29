@@ -1,4 +1,4 @@
-# main.tf
+main.tf
 
 provider "aws" {
   regions = ["us-west-1", "eu-central-1", "sa-east-1"]
