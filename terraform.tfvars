@@ -167,3 +167,30 @@ private_subnets_AT = {
 #   }
 # }
 
+
+
+##############################
+#web alb
+tags_alb_web = {
+  Name = "tf-webtier-alb",
+  Kind = "practice"
+}
+
+#app alb
+tags_alb_app = {
+  Name = "tf-apptier-alb",
+  Kind = "practice"
+}
+
+##############################
+#target group
+
+tags_web_tg = {
+  Name = "tf-webtier-tg",
+  Kind = "practice"
+}
+
+tags_app_tg = {
+  Name = "tf-apptier-tg",
+  Kind = "practice"
+}

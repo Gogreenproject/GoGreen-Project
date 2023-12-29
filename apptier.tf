@@ -72,3 +72,53 @@ resource "aws_subnet" "private_subnets_AT" {
     Name = each.value.name
   }
 }
+
+
+#Application load balancer 
+module "app-alb" {
+  source = "./modules/application_load_balancer"
+  name   = "tf-apptier-alb"
+  security_groups = [module.sg_alb_app.sg_id]
+  subnets         = aws_subnet.private_subnets_AT[each.key].id
+  is_internal     = true
+  tags_alb = var.tags_alb_app
+}
+
+
+
+#Listener group 
+module "http_listener_app" {
+  source   = "./modules/listener_group"
+  lb_arn   = module.app-alb.alb_arn
+  port     = "80"
+  protocol = "HTTP"
+  tg_arn = module.appTier-tg.tg_arn
+}
+
+
+
+
+#autoscaling 1
+module "app_asg1" {
+  source              = "./modules/autoscaling_group"
+  vpc_zone_identifier = [module.subnet-priv-1a.subnet_id]
+  desired_capacity  = 1
+  max_size          = 1
+  min_size          = 1
+  target_group_arns = [module.appTier-tg.tg_arn]
+  launch_template   = module.apptier_lt.lt_id
+
+
+}
+#autoscaling 2
+module "app_asg2" {
+  source              = "./modules/autoscaling_group"
+  vpc_zone_identifier = [module.subnet-priv-1b.subnet_id]
+  desired_capacity  = 1
+  max_size          = 1
+  min_size          = 1
+  target_group_arns = [module.appTier-tg.tg_arn]
+  launch_template   = module.apptier_lt.lt_id
+
+
+}
