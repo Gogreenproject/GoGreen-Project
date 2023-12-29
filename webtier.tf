@@ -8,21 +8,7 @@ resource "aws_instance" "Web_Tier" {
   vpc_security_group_ids = [module.security-groups.security_group_id["Web_tier_sg"]]
   #vpc_security_group_ids = [module.security_groups.security_group_id["cloud_2023_sg"]] 
 
-  user_data = <<-EOF
-                             #!/bin/bash
-                             sudo yum update -y
-                             sudo systemctl start httpd.service
-                             sudo systemctl enable httpd.service
-                             sudo echo "<h1> HELLO from ${upper(each.key)}_SERVER </h1>" > /var/www/html/index.html    
-                             sudo yum -y install httpd php mysql php-mysql
-                             sudo chkconfig httpd on
-                             sudo if [ ! -f /var/www/html/lab-app.tgz ]; then
-                             sudo cd /var/www/html
-                             sudo wget https://aws-tc-largeobjects.s3-us-west-2.amazonaws.com/CUR-TF-200-ACACAD/studentdownload/lab-app.tgz
-                             sudo tar xvfz lab-app.tgz
-                             sudo chown apache:root /var/www/html/rds.conf.php
-                             sudo fi              
-                            EOF
+  user_data = file("web.sh")
   tags = {
     Name = join("_", [var.prefix, each.key])
   }
