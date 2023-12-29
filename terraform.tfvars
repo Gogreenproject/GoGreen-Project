@@ -32,7 +32,7 @@ security_groups = {
   "Bastion_host_sg" : {
     description = "Security group for web servers"
     ingress_rules = [
-     
+
       {
         description = "my_ssh"
         priority    = 202
@@ -70,7 +70,7 @@ security_groups = {
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
       }
-    
+
     ]
     egress_rules = [
       {
