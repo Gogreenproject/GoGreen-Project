@@ -1,35 +1,35 @@
 output "vpc_id" {
-  value = module.my_vpc.my_vpc_id
+  value = module.vpc.vpc_id
 }
 
 output "igw_id" {
-  value = module.igw.my_igw_id
+  value = aws_internet_gateway.igw_id
 }
 
 output "eip_id" {
-  value = module.eip.eip_id
+  value = aws_eip.nat_id
 }
 
 output "nat_id" {
-  value = module.nat.nat_id
+  value = aws_nat_gateway.nat_id
 }
 
 output "public_rt_id" {
-  value = module.public_rt.rt_id
+  value = aws_route_table.rt_public_id
 }
 
 output "private_rt_id" {
-  value = module.private_rt.rt_id
+  value = aws_route_table.rt_private_id
 }
 
 ##Web tier
-output "subnet-pub-1a-id" {
-  value = module.subnet-pub-1a.subnet_id
+output "subnet-pubs-id" {
+  value = aws_subnet.public_subnets_id
 }
 
-output "subnet-pub-1b-id" {
-  value = module.subnet-pub-1b.subnet_id
-}
+# output "subnet-pub-1b-id" {
+#   value = module.subnet-pub-1b.subnet_id
+# }
 
 output "sg_alb_web_id" {
   value = module.sg_alb_web.sg_id
@@ -49,13 +49,13 @@ output "webtier_lt-id" {
 
 ##App Tier 
 
-output "subnet-priv-1a-id" {
-  value = module.subnet-priv-1a.subnet_id
+output "subnet-priv-id" {
+  value = aws_subnet.private_subnets_AT
 }
 
-output "subnet-priv-1b-id" {
-  value = module.subnet-priv-1b.subnet_id
-}
+# output "subnet-priv-1b-id" {
+#   value = module.subnet-priv-1b.subnet_id
+# }
 
 output "sg_alb_app_id" {
   value = module.sg_alb_app.sg_id
@@ -73,7 +73,7 @@ output "apptier_lt-id" {
   value = module.apptier_lt.lt_id
 }
 
-##Data Tier
+#Data Tier
 
 output "subnet-rds-priv-1a-id" {
   value = module.subnet-rds-priv-1a.subnet_id
@@ -87,7 +87,7 @@ output "sg_rds_id" {
   value = module.sg_rds.sg_id
 }
 
-output subnet_group_id {
+output "subnet_group_id" {
   value = module.db_subnet_group.subnet_group_id
 }
 
