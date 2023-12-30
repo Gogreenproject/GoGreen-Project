@@ -1,4 +1,3 @@
-########################################
 
 # Users
 resource "aws_iam_user" "SysAdmin" {
