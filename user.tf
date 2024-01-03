@@ -1,3 +1,21 @@
+terraform {
+  cloud {
+    organization = "s_tc_1"
+
+    workspaces {
+      name = "project_lab"
+    }
+  }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+#########################################
+
 # Users
 resource "aws_iam_user" "SysAdmin" {
   for_each = toset( ["sysadmin1", "sysadmin2"] )
@@ -23,6 +41,37 @@ resource "aws_iam_group" "Monitoring_Group" {
   name     = "Monitoring_Group"
 }
 
+######################################################
+# Group Policy
+data "aws_iam_policy" "sysadmin" {
+  arn = "arn:aws:iam::aws:policy/job-function/SystemAdministrator"
+}
+
+data "aws_iam_policy" "monitor" {
+  arn = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
+}
+
+data "aws_iam_policy" "db_admin" {
+  arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
+}
+
+# Group Policy attachment
+resource "aws_iam_group_policy_attachment" "sysadmin" {
+  policy_arn = data.aws_iam_policy.sysadmin.arn
+  group = aws_iam_group.sysadmin_group.name
+}
+
+resource "aws_iam_group_policy_attachment" "monitor" {
+  policy_arn = data.aws_iam_policy.monitor.arn
+   group = aws_iam_group.Monitoring_Group.name
+}
+
+resource "aws_iam_group_policy_attachment" "db_admin" {
+  policy_arn = data.aws_iam_policy.db_admin.arn
+  group      = aws_iam_group.dbadmin_group.name
+}
+
+############################################
 # Membership
 resource "aws_iam_group_membership" "team1" {
   name = "sysadmin_group-membership"
@@ -42,65 +91,86 @@ resource "aws_iam_group_membership" "team3" {
   users = [aws_iam_user.Monitoring[each.key].name]
   group = aws_iam_group.Monitoring_Group.name
  }
- 
-############################################
-# Group Policy
-resource "aws_iam_group_policy" "sysadmin_policy" {
-  name  = "sysadmin_policy"
-  group = aws_iam_group.sysadmin_group.name
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
+
+ ################################################
+# Login and Password
+resource "aws_iam_user_login_profile" "p1" {
+  for_each = toset( ["sysadmin1", "sysadmin2"] )
+  user = "${aws_iam_user.SysAdmin[each.key].name}"
+
+  password_length = 10 
+}
+resource "aws_iam_user_login_profile" "p2" {
+  for_each = toset( ["dbadmin1", "dbadmin2"] )
+  user = "${aws_iam_user.DBAdmin[each.key].name}"
+
+  password_length = 10 
+}
+resource "aws_iam_user_login_profile" "p3" {
+  for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
+  user = "${aws_iam_user.Monitoring[each.key].name}"
+
+  password_length = 10 
+}
+
+# Create access keys for users
+resource "aws_iam_access_key" "user_access_keys1" {
+  for_each = toset( ["sysadmin1", "sysadmin2"] )
+  user = "${aws_iam_user.SysAdmin[each.key].name}"  
+
+  # Ignore changes
+  # lifecycle {
+  #   ignore_changes = [secret]
+  # }
+}
+resource "aws_iam_access_key" "user_access_keys2" {
+  for_each = toset( ["dbadmin1", "dbadmin2"] )
+  user = "${aws_iam_user.DBAdmin[each.key].name}"  
+
+  # # Ignore changes
+  # lifecycle {
+  #   ignore_changes = [secret]
+  # }
+}
+resource "aws_iam_access_key" "user_access_keys3" {
+ for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
+  user = "${aws_iam_user.Monitoring[each.key].name}"  
+
+  # # Ignore changes
+  # lifecycle {
+  #   ignore_changes = [secret]
+  # }
+}
+
+resource "aws_secretsmanager_secret" "users" {
+  name = "users_passwords"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "users1" {
+  for_each = toset( ["sysadmin1", "sysadmin2"] )
+  secret_id = aws_secretsmanager_secret.users.id
+  secret_string = jsonencode({
+    username = "${aws_iam_user.SysAdmin[each.key].name}"  
+    password = "${aws_iam_user_login_profile.p1[each.key].password}"
   })
 }
 
-resource "aws_iam_group_policy" "dbadmin_policy" {
-  name  = "dbadmin_policy"
-  group = aws_iam_group.dbadmin_group.name
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
+resource "aws_secretsmanager_secret_version" "users2" {
+  for_each = toset( ["dbadmin1", "dbadmin2"] )
+  secret_id = aws_secretsmanager_secret.users.id
+  secret_string = jsonencode({
+    username = "${aws_iam_user.DBAdmin[each.key].name}" 
+    password = "${aws_iam_user_login_profile.p2[each.key].password}"
   })
 }
 
-resource "aws_iam_group_policy" "monitoring_policy" {
-  name  = "monitoring_policy"
-  group = aws_iam_group.Monitoring_Group.name
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
+resource "aws_secretsmanager_secret_version" "users3" {
+  for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
+  secret_id = aws_secretsmanager_secret.users.id
+  secret_string = jsonencode({
+    username = "${aws_iam_user.Monitoring[each.key].name}"
+    password = "${aws_iam_user_login_profile.p3[each.key].password}"
   })
 }
