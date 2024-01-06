@@ -11,10 +11,7 @@ env:
   AWS_REGION: "us-west-2"
   
 jobs:
-  terraform:
-    defaults:
-      run:
-        working-directory: GoGreen-Project
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
