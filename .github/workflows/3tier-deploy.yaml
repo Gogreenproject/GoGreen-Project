@@ -24,9 +24,8 @@ jobs:
         run: terraform plan
       - name: Run Terraform Apply
         run: terraform apply -auto-approve
-        if: github.event_name == 'workflow_dispatch'
       - name: Time
-       run: sleep 180
+       run: sleep 600
 
       - name: Run Terraform Destroy
         run: terraform destroy -auto-approve
