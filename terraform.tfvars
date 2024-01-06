@@ -138,18 +138,6 @@ private_subnets_AT = {
   }
 }
 
-# private_subnets_db = {
-#   db_tier_1 = {
-#     name              = "DB_TIER_1",
-#     cidr_block        = "10.0.6.0/24"
-#     availability_zone = "us-west-2a"
-#   },
-#   db_tier_2= {
-#     name              = "DB_TIER_2",
-#     cidr_block        = "10.0.7.0/24"
-#     availability_zone = "us-west-2b"
-#   }
-# }
 
 
 

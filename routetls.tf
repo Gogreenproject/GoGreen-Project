@@ -46,16 +46,3 @@ locals {
     "web_tier_2" = "app_tier_2"
   }
 }
-
-# resource "aws_route_table" "db" {
-#   vpc_id = "${aws_vpc.default.id}"
-
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = "${aws_nat_gateway.default.id}"
-#   }
-
-#   tags {
-#     Name = "DB"
-#   }
-# }
