@@ -23,8 +23,7 @@ resource "aws_iam_group" "Monitoring_Group" {
   name = "Monitoring_Group"
 }
 
-
-
+# Membership
 resource "aws_iam_group_membership" "team1" {
   name     = "sysadmin_group-membership"
   for_each = toset(["sysadmin1", "sysadmin2"])
@@ -40,11 +39,12 @@ resource "aws_iam_group_membership" "team2" {
 }
 
 resource "aws_iam_group_membership" "team3" {
-  name     = "monitoring_group-membership"
-  for_each = toset(["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"])
-  users    = [aws_iam_user.Monitoring[each.key].name]
-  group    = aws_iam_group.Monitoring_Group.name
-}
+  name = "monitoring_group-membership"
+  for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
+  users = [aws_iam_user.Monitoring[each.key].name]
+  group = aws_iam_group.Monitoring_Group.name
+ }
+ 
 ############################################
 # Group Policy
 resource "aws_iam_group_policy" "sysadmin_policy" {
