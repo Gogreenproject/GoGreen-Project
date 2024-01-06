@@ -1,4 +1,4 @@
-resource "aws_lb_listener" lg {
+resource "aws_lb_listener" "lg" {
   load_balancer_arn = var.lb_arn
   port              = var.port
   protocol          = var.protocol

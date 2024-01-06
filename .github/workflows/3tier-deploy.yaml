@@ -1,0 +1,35 @@
+name: Run Terraform
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "us-west-2"
+  
+jobs:
+  terraform:
+    defaults:
+      run:
+        working-directory: GoGreen-Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Run Terraform Init
+        run: terraform init
+      - name: Run Terraform Plan 
+        run: terraform plan
+      - name: Run Terraform Apply
+        run: terraform apply -auto-approve
+        if: github.event_name == 'workflow_dispatch'
+      #- name: Time
+       # run: sleep 1000
+
+      #- name: Run Terraform Destroy
+       # run: terraform destroy -auto-approve

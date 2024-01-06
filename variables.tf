@@ -165,13 +165,13 @@ variable "tags_sg_web" {
 #sg_alb_app
 variable "ingress_rules_app" {
   type = list(any)
-
 }
 variable "sg_name_app" {
   type = string
 }
 variable "egress_rules_app" {
   type = list(any)
+  
 }
 variable "sg_description_app" {
   type = string
@@ -181,6 +181,7 @@ variable "sg_description_app" {
 # }
 variable "tags_sg_app" {
   type = map(any)
+
 }
 ##############################
 #web alb
