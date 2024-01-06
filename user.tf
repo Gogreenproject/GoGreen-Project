@@ -1,48 +1,50 @@
 # Users
 resource "aws_iam_user" "SysAdmin" {
-  for_each = toset( ["sysadmin1", "sysadmin2"] )
+  for_each = toset(["sysadmin1", "sysadmin2"])
   name     = each.key
 }
 resource "aws_iam_user" "DBAdmin" {
-  for_each = toset( ["dbadmin1", "dbadmin2"] )
+  for_each = toset(["dbadmin1", "dbadmin2"])
   name     = each.key
 }
 resource "aws_iam_user" "Monitoring" {
-  for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
+  for_each = toset(["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"])
   name     = each.key
 }
 
 # Groups
 resource "aws_iam_group" "sysadmin_group" {
-  name     = "Sytem_Administrator_Group"
+  name = "Sytem_Administrator_Group"
 }
 resource "aws_iam_group" "dbadmin_group" {
-  name     = "Database_Administrator_Group"
+  name = "Database_Administrator_Group"
 }
 resource "aws_iam_group" "Monitoring_Group" {
-  name     = "Monitoring_Group"
+  name = "Monitoring_Group"
 }
 
-# Membership
+
+
 resource "aws_iam_group_membership" "team1" {
-  name = "sysadmin_group-membership"
-  for_each = toset( ["sysadmin1", "sysadmin2"] )
-  users = [aws_iam_user.SysAdmin[each.key].name]
-  group = aws_iam_group.sysadmin_group.name
- }
+  name     = "sysadmin_group-membership"
+  for_each = toset(["sysadmin1", "sysadmin2"])
+  users    = [aws_iam_user.SysAdmin[each.key].name]
+  group    = aws_iam_group.sysadmin_group.name
+}
+
 resource "aws_iam_group_membership" "team2" {
-  name = "dbadmin_group-membership"
-  for_each = toset( ["dbadmin1", "dbadmin2"] )
-  users = [aws_iam_user.DBAdmin[each.key].name]
-  group = aws_iam_group.dbadmin_group.name
- }
+  name     = "dbadmin_group-membership"
+  for_each = toset(["dbadmin1", "dbadmin2"])
+  users    = [aws_iam_user.DBAdmin[each.key].name]
+  group    = aws_iam_group.dbadmin_group.name
+}
+
 resource "aws_iam_group_membership" "team3" {
-  name = "monitoring_group-membership"
-  for_each = toset( ["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"] )
-  users = [aws_iam_user.Monitoring[each.key].name]
-  group = aws_iam_group.Monitoring_Group.name
- }
- 
+  name     = "monitoring_group-membership"
+  for_each = toset(["monitoruser1", "monitoruser2", "monitoruser3", "monitoruser4"])
+  users    = [aws_iam_user.Monitoring[each.key].name]
+  group    = aws_iam_group.Monitoring_Group.name
+}
 ############################################
 # Group Policy
 resource "aws_iam_group_policy" "sysadmin_policy" {

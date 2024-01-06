@@ -19,7 +19,7 @@ resource "aws_security_group" "database-sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [module.security-groups.security_group_id]
+    security_groups = [module.security-groups.security_group_id["Web_tier_sg"]]
   }
 
   egress {

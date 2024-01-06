@@ -1,30 +1,15 @@
-public_subnets = {
-  bastion_host_1 = {
-    name              = "BASTION_HOST_1",
-    cidr_block        = "10.0.0.0/24"
-    availability_zone = "us-west-2a"
-  },
-  bastion_host_2 = {
-    name              = "BASTION_HOST_2",
-    cidr_block        = "10.0.1.0/24"
-    availability_zone = "us-west-2b"
-  },
+
+
+public_subnets_WT= {
   web_tier_1 = {
     name              = "WEB_TIER_1",
-    cidr_block        = "10.0.2.0/24"
+    cidr_block        = "10.0.1.0/24"
     availability_zone = "us-west-2a"
   },
   web_tier_2 = {
     name              = "WEB_TIER_2",
-    cidr_block        = "10.0.3.0/24"
+    cidr_block        = "10.0.2.0/24"
     availability_zone = "us-west-2b"
-  }
-}
-
-ec2_instance = {
-  bastion_host_1 = {
-    name      = "BASTION_HOST_1",
-    subnet_id = ""
   }
 }
 
@@ -168,28 +153,4 @@ private_subnets_AT = {
 
 
 
-##############################
-#web alb
-tags_alb_web = {
-  Name = "tf-webtier-alb",
-  Kind = "practice"
-}
 
-#app alb
-tags_alb_app = {
-  Name = "tf-apptier-alb",
-  Kind = "practice"
-}
-
-##############################
-#target group
-
-tags_web_tg = {
-  Name = "tf-webtier-tg",
-  Kind = "practice"
-}
-
-tags_app_tg = {
-  Name = "tf-apptier-tg",
-  Kind = "practice"
-}
