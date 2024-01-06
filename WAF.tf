@@ -44,7 +44,7 @@ resource "aws_wafv2_web_acl" "Go-WAF" {
       }
     }
 
-    token_domains = ["mywebsite.com", "myotherwebsite.com"]
+    token_domains = ["vimpire.org "]
 
     visibility_config {
       cloudwatch_metrics_enabled = false
