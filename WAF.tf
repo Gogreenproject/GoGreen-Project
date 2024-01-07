@@ -1,7 +1,7 @@
 resource "aws_wafv2_web_acl" "Go-WAF" {
   name        = "Go-WAF"
   description = "Example of a managed rule."
-  scope       = "REGIONAL"
+  scope       = "vampire.org"
 
   default_action {
     allow {}
@@ -64,3 +64,6 @@ resource "aws_wafv2_web_acl" "Go-WAF" {
     sampled_requests_enabled   = false
   }
 }
+
+
+

@@ -71,4 +71,29 @@ variable "private_subnets_AT" {
   }
 }
 
+variable "private_subnets_db" {
+  type = map(object({
+    name              = string,
+    cidr_block        = string,
+    availability_zone = string
+  }))
 
+  default = {
+  }
+}
+
+variable "database_name" {
+  type    = string
+  default = ""
+}
+
+variable "dbusername" {
+  description = "The username for the DB master user"
+  type        = string
+  default     = "admin"
+}
+variable "dbpassword" {
+  description = "The password for the DB master user"
+  type        = string
+  default     = "password"
+}
